@@ -1,0 +1,45 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app-header {
+    font-family: 'Jost', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    color: #969696;
+    margin: 0;  
+    padding: 0; 
+    
+    .logo-container {
+      img {
+        width: 108px;
+        height: 32px;
+        padding: 11px;
+        margin-left: 32px;
+        margin-top: 12px;
+      }
+    }
+  
+    .user-info {
+        margin-right: 32px;
+        align-items: center;
+
+      span {
+        font-weight: bold;
+        padding-right: 11px;
+        font-size: 14px;
+        width: 160px;
+        height: 24px;
+      }
+
+      img {
+       
+      }
+    }
+  }
+  
