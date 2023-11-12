@@ -57,7 +57,7 @@ const ActionsCompanyModal = ({ onClose, onAddCompany, onEditCompany, editingComp
           <label>CNPJ:</label>
           <input type="number" maxLength={14} value={cnpj} onChange={(e) => setCnpj(e.target.value)} />
           <label>E-mail:</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className='modal-buttons'>
           <div className='delete-button'>

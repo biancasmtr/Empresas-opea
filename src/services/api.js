@@ -1,4 +1,5 @@
-const axios = require("axios")
+import axios from 'axios';
+// const axios = require("axios")
 
 const api = axios.create({
   baseURL: 'https://outros.opea-uat.solutions/prova/front/api',
