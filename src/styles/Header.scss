@@ -12,10 +12,10 @@ body, html {
     width: 100%;
     background-color: #fff;
     color: #969696;
-    margin: 0;  
-    padding: 0; 
+    padding-top: 10px; 
     
     .logo-container {
+
       img {
         width: 108px;
         height: 32px;
@@ -28,6 +28,7 @@ body, html {
     .user-info {
         margin-right: 32px;
         align-items: center;
+        justify-content: center;
 
       span {
         font-weight: bold;
@@ -37,9 +38,21 @@ body, html {
         height: 24px;
       }
 
-      img {
-       
+    }
+  }
+
+  @media (max-width:1200px) {
+    .app-header {
+      font-family: 'Jost', sans-serif;
+      width: 100%;
+      color: #969696;
+      margin: 0;  
+      padding-top: 10px; 
+        
+      .user-info {
+          margin-right: 32px;
+          align-items: center;
+          justify-content: center;
       }
     }
   }
-  

@@ -1,16 +1,19 @@
 
 import React, { useEffect, useState } from 'react';
-import { fetchCompanies } from '../services/api';
+import { fetchCompanies, createCompany, updateCompany, deleteCompany } from '../services/api';
 import Header from './Header';
-import AddCompany from './AddCompany';
-import icon from '../images/icon-list.svg'
-import search from '../images/icon-search.svg'
-import '../styles/styles.scss'
+import ActionsCompany from './ActionsCompany';
+import ActionsCompanyModal from './ActionsCompanyModal';
+import icon from '../images/icon-list.svg';
+import search from '../images/icon-search.svg';
+import '../styles/styles.scss';
 
 const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [showAddCompany, setShowAddCompany] = useState(false);
+  const [showAddCompanyModal, setShowAddCompanyModal] = useState(false);
+  const [editingCompany, setEditingCompany] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   useEffect(() => {
     fetchCompanies(searchText)
@@ -18,29 +21,77 @@ const CompanyList = () => {
       .catch((error) => console.error('Error fetching companies:', error));
   }, [searchText]);
 
-  const handleAddCompanyClick = () => {
-    setShowAddCompany(true);
+  useEffect(() => {
+    let timeout;
+    if (showDeletePopup) {
+      timeout = setTimeout(() => setShowDeletePopup(false), 3000);
+    }
+    return () => clearTimeout(timeout);
+  }, [showDeletePopup]);
+
+  const handleAddCompany = async (newCompany) => {
+    try {
+      const createdCompany = await createCompany(newCompany);
+      setCompanies([...companies, createdCompany]);
+      return createdCompany;
+    } catch (error) {
+      console.error('Error creating company:', error);
+      return null;
+    }
+  };
+
+  const handleEditCompany = (companyId, updatedData) => {
+    const updatedCompanies = companies.map((company) =>
+      company.id === companyId ? { ...company, ...updatedData } : company
+    );
+    setCompanies(updatedCompanies);
+
+    updateCompany(companyId, updatedData)
+      .then((updatedCompany) => {
+        const finalUpdatedCompanies = companies.map((company) =>
+          company.id === companyId ? updatedCompany : company
+        );
+        setCompanies(finalUpdatedCompanies);
+      })
+      .catch((error) => {
+        console.error('Error updating company:', error);
+      });
+
+    setEditingCompany(null);
+  };
+
+  const handleEditButtonClick = (company) => {
+    setEditingCompany(company);
+    setShowAddCompanyModal(true);
+  };
+
+  const handleDeleteCompany = async (companyId) => {
+    await deleteCompany(companyId);
+    setShowDeletePopup(true);
+
+    const updatedCompanies = companies.filter((company) => company.id !== companyId);
+    setCompanies(updatedCompanies);
   };
 
   return (
     <div>
       <Header userName="Nome do Usuário" />
       <ul>
-        <li >
+        <li>
           <div className="filter-bar">
             <input
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search by company name"
+              placeholder="Buscar empresa..."
             />
             <img src={search} alt="icon list" />
           </div>
         </li>
-        <AddCompany onClick={handleAddCompanyClick} />
+        <ActionsCompany onClick={() => setShowAddCompanyModal(true)} />
 
         {companies.map((company) => (
-          <li key={company.id} id='li'>
+          <li key={company.id} onClick={() => handleEditButtonClick(company)} id='li'>
             <img src={icon} alt="icon list" />
             <div className="text">
               <p>Name: {company.name}</p>
@@ -49,8 +100,29 @@ const CompanyList = () => {
           </li>
         ))}
       </ul>
+
+      {showAddCompanyModal && (
+        <ActionsCompanyModal
+          onClose={() => {
+            setShowAddCompanyModal(false);
+            setEditingCompany(null);
+          }}
+          onAddCompany={handleAddCompany}
+          onEditCompany={handleEditCompany}
+          onDeleteCompany={handleDeleteCompany}
+          editingCompany={editingCompany}
+        />
+      )}
+
+      {showDeletePopup && (
+        <div className="delete-popup">
+          Empresa excluída com sucesso!
+        </div>
+      )}
     </div>
   );
 };
 
 export default CompanyList;
+
+
