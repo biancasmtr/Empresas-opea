@@ -83,6 +83,16 @@ ul {
     }
 }
 
+@media (max-width: 768px) {
+    ul {
+        list-style: none;
+        width: 350px;
+        margin: 0 auto;
+        margin-top: 48px;
+        padding: 0;
+    }
+} 
+
 @media (max-width: 1200px) {
     
     .filter-bar {
@@ -101,7 +111,6 @@ ul {
     }
     ul {
         list-style: none;
-        width: 900px;
         margin: 0 auto;
         margin-top: 48px;
         padding: 0;
