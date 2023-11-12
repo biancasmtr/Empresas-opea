@@ -16,9 +16,18 @@ const CompanyList = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   useEffect(() => {
-    fetchCompanies(searchText)
-      .then((data) => setCompanies(data))
-      .catch((error) => console.error('Error fetching companies:', error));
+    const fetchData = async () => {
+      try {
+        const data = await fetchCompanies(searchText);
+        if (data) {
+          setCompanies(data);
+        }
+      } catch (error) {
+        console.error('Error fetching companies:', error);
+      }
+    };
+
+    fetchData();
   }, [searchText]);
 
   useEffect(() => {
